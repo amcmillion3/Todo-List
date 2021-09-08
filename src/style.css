@@ -1,0 +1,22 @@
+body {
+    margin: 0;
+    background-color: #e8e8e8;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #f5f5f5;
+    background-color: #202020;
+}
+
+.title {
+    margin: 0 2vw;
+    font-size: 7vw;
+}
+
+.icon {
+    margin: 2vw;
+    font-size: 7vw;
+}
