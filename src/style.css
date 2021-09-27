@@ -11,6 +11,10 @@ header {
     background-color: #202020;
 }
 
+main {
+    display: flex;
+}
+
 .title {
     margin: 0 2vw;
     font-size: 7vw;
