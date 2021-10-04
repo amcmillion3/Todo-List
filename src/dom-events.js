@@ -2,15 +2,17 @@ import {Task} from './task-constructor';
 import {Project} from './project-constructor';
 
 const domEvents = () => {
+    const projectForm = document.getElementById('project-form');
     const addProjectButton = document.getElementById('add-project-button');
+    const cancelProjectButton = document.getElementById('cancel-project-button');
     
     addProjectButton.addEventListener('click', addProject);
+    cancelProjectButton.addEventListener('click', projectForm.reset());
     
     let theProjectsList = [];
     
     function addProject(e) {
         e.preventDefault();
-        const projectForm = document.getElementById('project-form');
         let titleValue = {
             title: document.getElementById('project-form-title').value
         };
@@ -30,10 +32,31 @@ const domEvents = () => {
             let projectCard = document.createElement('div');
             projectCard.classList.add('project-card');
             projectCard.dataset.id = i;
-            projectCard.textContent = `${theProjectsList[i].title}`;
+
+            let projectTitle = document.createElement('p');
+            projectTitle.textContent = `${theProjectsList[i].title}`;
+            projectTitle.classList.add('project-title');
+            projectCard.appendChild(projectTitle);
+
+            let removeProjectButton = document.createElement('button');
+            removeProjectButton.classList.add('fa', 'fa-times');
+            removeProjectButton.setAttribute('type', 'submit');
+            projectCard.appendChild(removeProjectButton);
+
+            removeProject(projectCard, removeProjectButton);
+
             projectsList.appendChild(projectCard);
         };
     };
+
+    function removeProject(projectCard, removeProjectButton) {
+        removeProjectButton.addEventListener('click', (e) => {
+            theProjectsList.splice(projectCard.dataset.id, 1);
+            displayProjects(theProjectsList);
+            return theProjectsList;
+        });
+        setStorage();
+    }
     
     function setStorage() {
         localStorage.setItem(`theProjectsList`, JSON.stringify(theProjectsList));
