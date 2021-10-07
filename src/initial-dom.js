@@ -173,13 +173,13 @@ const initialDomLoad = () => {
         };
 
         const addButton = document.createElement('button');
-        addButton.id = 'add-project-button';
+        addButton.id = 'add-task-button';
         addButton.type = 'submit';
-        addButton.textContent = 'Add Project';
+        addButton.textContent = 'Add Task';
         taskForm.appendChild(addButton);
 
         const cancelButton = document.createElement('button');
-        cancelButton.id = 'cancel-project-button';
+        cancelButton.id = 'cancel-task-button';
         cancelButton.type = 'submit';
         cancelButton.textContent = 'Cancel';
         taskForm.appendChild(cancelButton);

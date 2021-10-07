@@ -12,7 +12,7 @@ header {
 }
 
 main {
-    display: flex;
+    display: flex-column;
 }
 
 .title {
@@ -23,4 +23,8 @@ main {
 .icon {
     margin: 2vw;
     font-size: 7vw;
+}
+
+.project-card {
+    display: flex;
 }
