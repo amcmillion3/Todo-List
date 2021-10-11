@@ -103,7 +103,6 @@ const domEvents = () => {
             taskCard.appendChild(taskDescription);
 
             let taskDate = document.createElement('p');
-            // taskDate.textContent = `${format(new Date(tasksList[i].dueDate, 'MM-dd-YYYY'))}`;
             taskDate.textContent = `${tasksList[i].dueDate}`;
             taskDate.classList.add('task-date');
             taskCard.appendChild(taskDate);
@@ -127,7 +126,7 @@ const domEvents = () => {
     function removeTask(taskCard, removeTaskButton) {
         removeTaskButton.addEventListener('click', (e) => {
             inboxTaskList.splice(taskCard.dataset.id, 1);
-            displayProjects(inboxTaskList);
+            displayTasks(inboxTaskList);
             return inboxTaskList;
         });
         setStorage();
@@ -146,6 +145,17 @@ const domEvents = () => {
             objects = JSON.parse(objects);
             theProjectsList = objects;
             displayProjects(objects);
+        }
+      })();
+
+      const restoreTasks = (() => {
+        if(!localStorage.inboxTaskList) {
+            displayTasks(inboxTaskList);
+        }else {
+            let objects = localStorage.getItem('inboxTaskList') 
+            objects = JSON.parse(objects);
+            inboxTaskList = objects;
+            displayTasks(objects);
         }
       })();
 };
