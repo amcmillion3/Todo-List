@@ -56,10 +56,86 @@ const domEvents = () => {
             return theProjectsList;
         });
         setStorage();
-    }
+    };
     
+    const taskForm = document.getElementById('task-form');
+    const addTaskButton = document.getElementById('add-task-button');
+    const cancelTaskButton = document.getElementById('cancel-task-button');
+
+    addTaskButton.addEventListener('click', addTask);
+    cancelTaskButton.addEventListener('click', taskForm.reset());
+    
+    let inboxTaskList = [];
+
+    function addTask(e) {
+        e.preventDefault();
+        let taskValues = {
+            title: document.getElementById('task-form-title').value,
+            description: document.getElementById('task-form-description').value,
+            dueDate: document.getElementById('date-picker').value,
+            priority: document.getElementById('priority-selector').value
+        };
+        let newTask = new Task(taskValues.title, taskValues.description, taskValues.dueDate, taskValues.priority);
+        inboxTaskList.push(newTask);
+        displayTasks(inboxTaskList);
+        setStorage();
+        taskForm.reset();
+    };
+
+    function displayTasks (tasksList) {
+        const taskCardsList = document.getElementById('cards');
+        while (taskCardsList.firstChild) {
+            taskCardsList.removeChild(taskCardsList.firstChild);
+        };
+        for(let i = 0; i < tasksList.length; i++) {
+            let taskCard = document.createElement('div');
+            taskCard.classList.add('task-card');
+            taskCard.dataset.id = i;
+
+            let taskTitle = document.createElement('p');
+            taskTitle.textContent = `${tasksList[i].title}`;
+            taskTitle.classList.add('task-title');
+            taskCard.appendChild(taskTitle);
+
+            let taskDescription = document.createElement('p');
+            taskDescription.textContent = `${tasksList[i].description}`;
+            taskDescription.classList.add('task-description');
+            taskCard.appendChild(taskDescription);
+
+            let taskDate = document.createElement('p');
+            // taskDate.textContent = `${format(new Date(tasksList[i].dueDate, 'MM-dd-YYYY'))}`;
+            taskDate.textContent = `${tasksList[i].dueDate}`;
+            taskDate.classList.add('task-date');
+            taskCard.appendChild(taskDate);
+
+            let taskPriority = document.createElement('p');
+            taskPriority.textContent = `Priority: ${tasksList[i].priority}`;
+            taskPriority.classList.add('task-priority');
+            taskCard.appendChild(taskPriority);
+
+            let removeTaskButton = document.createElement('button');
+            removeTaskButton.classList.add('fa', 'fa-times');
+            removeTaskButton.setAttribute('type', 'submit');
+            taskCard.appendChild(removeTaskButton);
+
+            removeTask(taskCard, removeTaskButton);
+
+            taskCardsList.appendChild(taskCard);
+        };
+    };
+
+    function removeTask(taskCard, removeTaskButton) {
+        removeTaskButton.addEventListener('click', (e) => {
+            inboxTaskList.splice(taskCard.dataset.id, 1);
+            displayProjects(inboxTaskList);
+            return inboxTaskList;
+        });
+        setStorage();
+    };
+
     function setStorage() {
         localStorage.setItem(`theProjectsList`, JSON.stringify(theProjectsList));
+        localStorage.setItem(`inboxTaskList`, JSON.stringify(inboxTaskList));
       };
 
       const restoreProjects = (() => {
