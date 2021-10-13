@@ -9,14 +9,19 @@ const domEvents = () => {
     addProjectButton.addEventListener('click', addProject);
     cancelProjectButton.addEventListener('click', projectForm.reset());
     
-    let theProjectsList = [];
+    const LOCAL_STORAGE_PROJECT_KEY = 'todo.projects';
+    const LOCAL_STORAGE_SELECTED_PROJECT_ID_KEY = 'todo.selectedProjectID'
+
+    let theProjectsList = JSON.parse(localStorage.getItem(LOCAL_STORAGE_PROJECT_KEY)) || [];
+    let selectedProjectId = localStorage.getItem(LOCAL_STORAGE_SELECTED_PROJECT_ID_KEY);
     
     function addProject(e) {
         e.preventDefault();
         let titleValue = {
-            title: document.getElementById('project-form-title').value
+            title: document.getElementById('project-form-title').value,
+            id: Date.now().toString()
         };
-        let newProject = new Project(titleValue.title);
+        let newProject = new Project(titleValue.title, titleValue.id);
         theProjectsList.push(newProject);
         displayProjects(theProjectsList);
         setStorage();
@@ -133,7 +138,7 @@ const domEvents = () => {
     };
 
     function setStorage() {
-        localStorage.setItem(`theProjectsList`, JSON.stringify(theProjectsList));
+        localStorage.setItem(LOCAL_STORAGE_PROJECT_KEY, JSON.stringify(theProjectsList));
         localStorage.setItem(`inboxTaskList`, JSON.stringify(inboxTaskList));
       };
 
@@ -158,6 +163,7 @@ const domEvents = () => {
             displayTasks(objects);
         }
       })();
+      console.log(theProjectsList);
 };
 
 export {domEvents};
