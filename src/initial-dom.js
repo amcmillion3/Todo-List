@@ -44,15 +44,6 @@ const initialDomLoad = () => {
         })();
         const menu = document.querySelector('.menu');
 
-        const inboxButton = (() => {
-            const element = document.createElement('button');
-            element.classList.add('button', 'active');
-            element.id = 'inbox';
-            element.textContent = 'Inbox';
-            menu.appendChild(element);
-            element.insertAdjacentHTML('afterbegin', '<i class="fas fa-inbox"></i>');
-        })();
-
         const projectHeader = (() =>{
             const element = document.createElement('h3');
             element.classList.add('project-menu-title');

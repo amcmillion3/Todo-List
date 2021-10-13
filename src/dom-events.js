@@ -67,6 +67,8 @@ const domEvents = () => {
     
     let inboxTaskList = [];
 
+    // Make UI a class of objects that can be created and removed with event listener. Put methods on the class to do what the UI needs to do to function.
+
     function addTask(e) {
         e.preventDefault();
         let taskValues = {
