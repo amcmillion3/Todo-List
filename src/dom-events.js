@@ -19,28 +19,33 @@ const domEvents = () => {
         e.preventDefault();
         let titleValue = {
             title: document.getElementById('project-form-title').value,
-            id: Date.now().toString()
+            // id: Date.now().toString()
         };
-        let newProject = new Project(titleValue.title, titleValue.id);
+        let newProject = new Project(titleValue.title);
         theProjectsList.push(newProject);
         displayProjects(theProjectsList);
         setStorage();
         projectForm.reset();
     };
 
+    const projectsList = document.getElementById('projects-list');
+
     function displayProjects (theProjectsList) {
-        const projectsList = document.getElementById('projects-list');
-        while (projectsList.firstChild) {
+        while (projectsList.firstChild) {  
             projectsList.removeChild(projectsList.firstChild);
         };
         for(let i = 0; i < theProjectsList.length; i++) {
             let projectCard = document.createElement('div');
             projectCard.classList.add('project-card');
             projectCard.dataset.id = i;
+            if (projectCard.dataset.id === selectedProjectId) {
+                projectCard.classList.add('active-project');
+            };
 
             let projectTitle = document.createElement('p');
             projectTitle.textContent = `${theProjectsList[i].title}`;
             projectTitle.classList.add('project-title');
+            projectTitle.dataset.id = i;
             projectCard.appendChild(projectTitle);
 
             let removeProjectButton = document.createElement('button');
@@ -51,12 +56,28 @@ const domEvents = () => {
             removeProject(projectCard, removeProjectButton);
 
             projectsList.appendChild(projectCard);
+
+            theProjectsList[i].id = i;
         };
     };
+
+    projectsList.addEventListener('click', e => {
+        if (e.target.tagName.toLowerCase() === 'div' || e.target.tagName.toLowerCase() === 'p') {
+            selectedProjectId = e.target.dataset.id;
+        };
+        const selectedProject = theProjectsList.find(project => project.id == selectedProjectId);
+        let currentTaskList = selectedProject.taskArray;
+        setStorage();
+        displayProjects(theProjectsList);
+        displayTasks(currentTaskList);
+    });
 
     function removeProject(projectCard, removeProjectButton) {
         removeProjectButton.addEventListener('click', (e) => {
             theProjectsList.splice(projectCard.dataset.id, 1);
+            if (selectedProjectId === projectCard.dataset.id) {
+                selectedProjectId = null;
+            };
             displayProjects(theProjectsList);
             return theProjectsList;
         });
@@ -70,21 +91,25 @@ const domEvents = () => {
     addTaskButton.addEventListener('click', addTask);
     cancelTaskButton.addEventListener('click', taskForm.reset());
     
-    let inboxTaskList = [];
-
     function addTask(e) {
         e.preventDefault();
-        let taskValues = {
-            title: document.getElementById('task-form-title').value,
-            description: document.getElementById('task-form-description').value,
-            dueDate: document.getElementById('date-picker').value,
-            priority: document.getElementById('priority-selector').value
+        const selectedProject = theProjectsList.find(project => project.id == selectedProjectId);
+        if (selectedProjectId === null) {
+            alert('Please select a project');
+        } else {
+            let currentTaskList = selectedProject.taskArray;
+            let taskValues = {
+                title: document.getElementById('task-form-title').value,
+                description: document.getElementById('task-form-description').value,
+                dueDate: document.getElementById('date-picker').value,
+                priority: document.getElementById('priority-selector').value
+            };
+            let newTask = new Task(taskValues.title, taskValues.description, taskValues.dueDate, taskValues.priority);
+            currentTaskList.push(newTask);
+            displayTasks(currentTaskList);
+            setStorage();
+            taskForm.reset();
         };
-        let newTask = new Task(taskValues.title, taskValues.description, taskValues.dueDate, taskValues.priority);
-        inboxTaskList.push(newTask);
-        displayTasks(inboxTaskList);
-        setStorage();
-        taskForm.reset();
     };
 
     function displayTasks (tasksList) {
@@ -129,17 +154,19 @@ const domEvents = () => {
     };
 
     function removeTask(taskCard, removeTaskButton) {
+        const selectedProject = theProjectsList.find(project => project.id == selectedProjectId);
+        let currentTaskList = selectedProject.taskArray;
         removeTaskButton.addEventListener('click', (e) => {
-            inboxTaskList.splice(taskCard.dataset.id, 1);
-            displayTasks(inboxTaskList);
-            return inboxTaskList;
+            currentTaskList.splice(taskCard.dataset.id, 1);
+            displayTasks(currentTaskList);
+            return currentTaskList;
         });
         setStorage();
     };
 
     function setStorage() {
         localStorage.setItem(LOCAL_STORAGE_PROJECT_KEY, JSON.stringify(theProjectsList));
-        localStorage.setItem(`inboxTaskList`, JSON.stringify(inboxTaskList));
+        localStorage.setItem(LOCAL_STORAGE_SELECTED_PROJECT_ID_KEY, selectedProjectId);
       };
 
       const restoreProjects = (() => {
@@ -154,16 +181,17 @@ const domEvents = () => {
       })();
 
       const restoreTasks = (() => {
-        if(!localStorage.inboxTaskList) {
-            displayTasks(inboxTaskList);
+          const selectedProject = theProjectsList.find(project => project.id == selectedProjectId);
+          let currentTaskList = selectedProject.taskArray;
+        if(!localStorage.currentTaskList) {
+            displayTasks(currentTaskList);
         }else {
-            let objects = localStorage.getItem('inboxTaskList') 
+            let objects = localStorage.getItem('currentTaskList') 
             objects = JSON.parse(objects);
-            inboxTaskList = objects;
+            currentTaskList = objects;
             displayTasks(objects);
         }
       })();
-      console.log(theProjectsList);
 };
 
 export {domEvents};

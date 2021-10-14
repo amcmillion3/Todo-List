@@ -1,7 +1,6 @@
 export class Project {
-    constructor(title, id) {
-        this.title = title,
-        this.id = id
+    constructor(title) {
+        this.title = title
     };
     taskArray = [];
 };
