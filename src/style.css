@@ -28,3 +28,7 @@ main {
 .project-card {
     display: flex;
 }
+
+.active-project {
+    background-color: #B8B8B8;
+}
