@@ -106,6 +106,15 @@ const initialDomLoad = () => {
 
     const taskContainer = document.getElementById('task-container');
 
+    const taskHeader = (() => {
+        const element = document.createElement('h3');
+            element.classList.add('task-header');
+            element.id = 'task-header';
+            element.textContent = 'Current Project';
+            taskContainer.appendChild(element);
+            element.insertAdjacentHTML('afterbegin', '<i class="fas fa-circle"></i>');
+    })();
+
     const createCards = (() => {
         const element = document.createElement('div');
         element.classList.add('cards');

@@ -19,7 +19,6 @@ const domEvents = () => {
         e.preventDefault();
         let titleValue = {
             title: document.getElementById('project-form-title').value,
-            // id: Date.now().toString()
         };
         let newProject = new Project(titleValue.title);
         theProjectsList.push(newProject);
@@ -61,12 +60,15 @@ const domEvents = () => {
         };
     };
 
+    const taskHeader = document.getElementById('task-header');
+
     projectsList.addEventListener('click', e => {
         if (e.target.tagName.toLowerCase() === 'div' || e.target.tagName.toLowerCase() === 'p') {
             selectedProjectId = e.target.dataset.id;
         };
         const selectedProject = theProjectsList.find(project => project.id == selectedProjectId);
         let currentTaskList = selectedProject.taskArray;
+        taskHeader.textContent = selectedProject.title;
         setStorage();
         displayProjects(theProjectsList);
         displayTasks(currentTaskList);
