@@ -74,6 +74,15 @@ const domEvents = () => {
         displayTasks(currentTaskList);
     });
 
+    (function selectedProjectOnLoad() {
+        const selectedProject = theProjectsList.find(project => project.id == selectedProjectId);
+        let currentTaskList = selectedProject.taskArray;
+        taskHeader.textContent = selectedProject.title;
+        setStorage();
+        displayProjects(theProjectsList);
+        displayTasks(currentTaskList);
+    })();
+
     function removeProject(projectCard, removeProjectButton) {
         removeProjectButton.addEventListener('click', (e) => {
             theProjectsList.splice(projectCard.dataset.id, 1);
@@ -85,6 +94,18 @@ const domEvents = () => {
         });
         setStorage();
     };
+
+    const createDefaultProject = (() => {
+        if (theProjectsList.some(project => project.title ==='Default')){
+            return;
+        } else {
+            let defaultProjectTitle = 'Default';
+            let defaultProject = new Project(defaultProjectTitle); 
+            theProjectsList.push(defaultProject);
+            displayProjects(theProjectsList);
+            setStorage();
+        }
+    })();
     
     const taskForm = document.getElementById('task-form');
     const addTaskButton = document.getElementById('add-task-button');
