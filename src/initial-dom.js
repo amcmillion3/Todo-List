@@ -40,16 +40,17 @@ const initialDomLoad = () => {
         const menuContainer = (() => {
             const element = document.createElement('section');
             element.classList.add('menu');
+            element.id = 'project-section-container';
             main.appendChild(element);
         })();
         const menu = document.querySelector('.menu');
 
         const projectHeader = (() =>{
-            const element = document.createElement('h3');
+            const element = document.createElement('h2');
             element.classList.add('project-menu-title');
             element.textContent = 'Projects';
             menu.appendChild(element);
-            element.insertAdjacentHTML('afterbegin', '<i class="fas fa-circle"></i>');
+            element.insertAdjacentHTML('afterbegin', '<i class="fa fa-circle"></i>');
         })();
 
         const projectsList = (() => {
@@ -64,7 +65,7 @@ const initialDomLoad = () => {
             element.id = 'add-new-project';
             element.textContent = 'Add New Project';
             menu.appendChild(element);
-            element.insertAdjacentHTML('afterbegin', '<i class="fas fa-plus"></i>');
+            element.insertAdjacentHTML('afterbegin', '<i class="fa fa-plus"></i>');
         })();
 
         const addProjectForm = (() => {
@@ -80,7 +81,7 @@ const initialDomLoad = () => {
             input.type = 'text';
             input.id = 'project-form-title';
             input.name = 'project-form-title';
-            input.required = true;
+            input.placeholder = 'Project Title';
             projectForm.appendChild(input);
 
             const addButton = document.createElement('button');
@@ -107,12 +108,12 @@ const initialDomLoad = () => {
     const taskContainer = document.getElementById('task-container');
 
     const taskHeader = (() => {
-        const element = document.createElement('h3');
+        const element = document.createElement('h2');
             element.classList.add('task-header');
             element.id = 'task-header';
             element.textContent = 'Current Project';
             taskContainer.appendChild(element);
-            element.insertAdjacentHTML('afterbegin', '<i class="fas fa-circle"></i>');
+            element.insertAdjacentHTML('afterbegin', '<i class="fa fa-circle"></i>');
     })();
 
     const createCards = (() => {
@@ -128,7 +129,7 @@ const initialDomLoad = () => {
         element.id = 'add-task';
         element.textContent = 'Add Task';
         taskContainer.appendChild(element);
-        element.insertAdjacentHTML('afterbegin', '<i class="fas fa-plus"></i>');
+        element.insertAdjacentHTML('afterbegin', '<i class="fa fa-plus"></i>');
     })();
 
     const addTaskForm = (() => {
@@ -144,14 +145,14 @@ const initialDomLoad = () => {
         titleInput.type = 'text';
         titleInput.id = 'task-form-title';
         titleInput.name = 'task-form-title';
-        titleInput.required = true;
+        titleInput.placeholder = 'Task Title';
         taskForm.appendChild(titleInput);
 
         const descriptionInput = document.createElement('input');
         descriptionInput.type = 'text';
         descriptionInput.id = 'task-form-description';
         descriptionInput.name = 'task-form-description';
-        descriptionInput.required = true;
+        descriptionInput.placeholder = 'Task Description';
         taskForm.appendChild(descriptionInput);
 
         const datePicker = document.createElement('input');
